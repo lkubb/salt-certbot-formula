@@ -1,0 +1,7 @@
+{%- set bin_path = "" -%}
+{%- if "pip" == mapdata.install_method -%}
+  {%- set bin_path = mapdata.lookup.pip_install_path | path_join("bin", "certbot") -%}
+{%- elif "certbot" | which -%}
+  {%- set bin_path = "certbot" | which -%}
+{%- endif -%}
+{%- do mapdata.update({"_bin": bin_path}) -%}

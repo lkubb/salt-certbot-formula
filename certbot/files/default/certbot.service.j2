@@ -1,0 +1,6 @@
+[Unit]
+Description=Let's Encrypt renewal
+
+[Service]
+Type=oneshot
+ExecStart={{ certbot._bin or "certbot" | which }} renew --quiet --agree-tos

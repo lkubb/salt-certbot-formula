@@ -1,0 +1,63 @@
+{
+  "template": "https://github.com/lkubb/salt-template-formula",
+  "commit": "50a694adefdf54f1ca465db433c033ca764942bc",
+  "checkout": null,
+  "context": {
+    "cookiecutter": {
+      "_extensions": [
+        "local_extensions.YAMLDumper"
+      ],
+      "_jinja2_env_vars": {
+        "block_start_string": "{!",
+        "block_end_string": "!}",
+        "variable_start_string": "{=",
+        "variable_end_string": "=}",
+        "comment_start_string": "{@",
+        "comment_end_string": "@}"
+      },
+      "name": "certbot",
+      "abbr": "certbot",
+      "abbr_pysafe": "certbot",
+      "pkg": "",
+      "needs_repo": "",
+      "config": "/etc/letsencrypt/cli.ini",
+      "service": "certbot",
+      "subcomponent": "",
+      "subcomponent_config": "",
+      "git_username": "lkubb",
+      "_lookup": {
+        "pkg": {
+          "name": "certbot"
+        },
+        "pip_install_path": "/opt/letsencrypt",
+        "pip_reqs": [
+          "python3-virtualenv"
+        ]
+      },
+      "_settings": {
+        "cert_config": {
+          "default": {
+            "auth": "standalone",
+            "install": false,
+            "options": {}
+          }
+        },
+        "certs": {},
+        "config": {
+          "agree-tos": true,
+          "email": "foo@example.com"
+        },
+        "install_method": "pip",
+        "pip_pkgs": [],
+        "renew": {
+          "install": true,
+          "timer": "daily",
+          "rand_delay": "1h"
+        },
+        "version": "latest"
+      },
+      "_template": "https://github.com/lkubb/salt-template-formula"
+    }
+  },
+  "directory": null
+}

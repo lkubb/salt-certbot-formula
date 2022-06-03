@@ -1,0 +1,36 @@
+# -*- coding: utf-8 -*-
+# vim: ft=yaml
+#
+# Set default values.
+---
+values:
+  lookup:
+    rootgroup: root
+    config: '/etc/letsencrypt/cli.ini'
+    service:
+      name: certbot
+    pip_install_path: /opt/letsencrypt
+    pip_reqs:
+      - python3-virtualenv
+    pkg:
+      name: certbot
+  cert_config:
+    default:
+      auth: standalone
+      install: false
+      options: {}
+  certs: {}
+  config:
+    agree-tos: true
+    email: foo@example.com
+  install_method: pip
+  pip_pkgs: []
+  renew:
+    install: true
+    rand_delay: 1h
+    timer: daily
+  version: latest
+  # Just here for testing
+  added_in_defaults: defaults_value
+  winner: defaults
+...

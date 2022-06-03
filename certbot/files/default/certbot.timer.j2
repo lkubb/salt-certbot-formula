@@ -1,0 +1,10 @@
+[Unit]
+Description=Renewal of Let's Encrypt's certificates
+
+[Timer]
+OnCalendar={{ certbot.renew.timer }}
+RandomizedDelaySec={{ certbot.renew.rand_delay }}
+Persistent=true
+
+[Install]
+WantedBy=timers.target
