@@ -14,9 +14,12 @@ certbot:
     agree-tos: true
     email: foo@example.com
   install_method: pip
+  ocsp_fetcher:
+    install: false
+    nginx_conf: /etc/nginx
+    subdir: ocsp-cache
   pip_pkgs: []
   renew:
-    install: true
     rand_delay: 1h
     timer: daily
   version: latest

@@ -4,11 +4,7 @@
 {%- set tplroot = tpldir.split('/')[0] %}
 {%- from tplroot ~ "/map.jinja" import mapdata as certbot with context %}
 
-include:
-  - .package
-  - .config
-  - .service
-  - .certs
-{%- if certbot.ocsp_fetcher.install %}
-  - .ocsp_fetcher
-{%- endif %}
+certbot-ocsp-fetcher-service-clean-service-dead:
+  service.dead:
+    - name: certbot-ocsp-fetcher.timer
+    - enable: false

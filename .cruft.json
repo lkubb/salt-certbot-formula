@@ -48,9 +48,13 @@
           "email": "foo@example.com"
         },
         "install_method": "pip",
+        "ocsp_fetcher": {
+          "install": false,
+          "nginx_conf": "/etc/nginx",
+          "subdir": "ocsp-cache"
+        },
         "pip_pkgs": [],
         "renew": {
-          "install": true,
           "timer": "daily",
           "rand_delay": "1h"
         },

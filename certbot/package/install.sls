@@ -32,8 +32,6 @@ Certbot is installed:
     - name: {{ certbot.lookup.pkg.name }}
 {%- endif %}
 
-{%- if certbot.renew.install %}
-
 Certbot renew unit files are available:
   file.managed:
     - names:
@@ -58,7 +56,6 @@ Certbot renew unit files are available:
       - Certbot is installed
     - context:
         certbot: {{ certbot | json }}
-{%- endif %}
 
 # This syncs all modules. Specifying a whitelist removes all
 # other modules.
