@@ -14,6 +14,7 @@ import salt.utils.yaml
 
 __virtualname__ = "certbot"
 
+
 def __virtual__():
     """
     Does not test for existence of certbot atm. @FIXME
@@ -53,12 +54,18 @@ def cli(cmd=None, binpath=None, raise_error=True):
         binpath = salt.utils.path.which("certbot")
 
     if not binpath or not Path(binpath).exists():
-        raise CommandExecutionError("Could not find certbot executable in '{}'.".format(binpath))
+        raise CommandExecutionError(
+            "Could not find certbot executable in '{}'.".format(binpath)
+        )
 
     out = __salt__["cmd.run_all"](" ".join([binpath] + cmd))
 
     if raise_error and out["retcode"]:
-        raise CommandExecutionError("Failed running certbot. Output:\n\n{}\n\n{}".format(out["stderr"], out["stdout"]))
+        raise CommandExecutionError(
+            "Failed running certbot. Output:\n\n{}\n\n{}".format(
+                out["stderr"], out["stdout"]
+            )
+        )
 
     return out
 
@@ -105,7 +112,9 @@ def list(binpath=None):
             certs.append(parsed)
         return certs
 
-    raise CommandExecutionError("Couldn't parse the following output:\n\n{}".format(out["stdout"]))
+    raise CommandExecutionError(
+        "Couldn't parse the following output:\n\n{}".format(out["stdout"])
+    )
 
 
 def exists(name, binpath=None):
@@ -189,7 +198,9 @@ def delete(name, binpath=None):
     return cli(cmd, binpath)["stdout"] or True
 
 
-def get(name, domains=None, options=None, auth="standalone", install=False, binpath=None):
+def get(
+    name, domains=None, options=None, auth="standalone", install=False, binpath=None
+):
     """
     Request a certificate.
 

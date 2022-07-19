@@ -17,7 +17,9 @@ def __virtual__():
     return __virtualname__
 
 
-def present(name, domains=None, options=None, auth="standalone", install=False, binpath=None):
+def present(
+    name, domains=None, options=None, auth="standalone", install=False, binpath=None
+):
     """
     Request a certificate.
 
@@ -68,7 +70,9 @@ def present(name, domains=None, options=None, auth="standalone", install=False, 
             ret["changes"] = {"created": name}
         else:
             ret["result"] = False
-            ret["comment"] = "Something went wrong calling certbot. This should not happen at all since errors are raised."
+            ret[
+                "comment"
+            ] = "Something went wrong calling certbot. This should not happen at all since errors are raised."
 
     except (CommandExecutionError, SaltInvocationError) as e:
         ret["result"] = False
@@ -104,7 +108,9 @@ def absent(name, binpath=None):
             ret["changes"] = {"deleted": name}
         else:
             ret["result"] = False
-            ret["comment"] = "Something went wrong calling certbot. This should not happen at all since errors are raised."
+            ret[
+                "comment"
+            ] = "Something went wrong calling certbot. This should not happen at all since errors are raised."
 
     except (CommandExecutionError, SaltInvocationError) as e:
         ret["result"] = False
