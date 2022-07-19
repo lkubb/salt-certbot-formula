@@ -39,6 +39,7 @@ certbot:
     timer: daily
   sync_certs:
     from: null
+    from_host_key: null
     ssh_privkey_pillar: null
     to: /etc/letsencrypt
   version: latest

@@ -50,6 +50,9 @@ certbot:
   sync_certs:
       # IP/hostname of host running certbot
     from: null
+      # Entry for the upstream host in known_hosts file. If unspecified, the first
+      # connection will be untrusted.
+    from_host_key: null
       # Pillar key that contains the private key needed to pull certificates.
     ssh_privkey_pillar: null
       # Targt directory where certificates should be synced to.

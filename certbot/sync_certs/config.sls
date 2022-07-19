@@ -19,3 +19,12 @@ sync_certs private key is present:
     - dir_mode: '0700'
     - require:
       - sls: {{ sls_sync_certs_package }}
+
+{%- if certbot.sync_certs.from_host_key %}
+
+sync_certs host key is known:
+  ssh_known_hosts.present:
+    - name: {{ certbot.sync_certs.from }}
+    - user: root
+    - key: {{ certbot.sync_certs.from_host_key }}
+{%- endif %}

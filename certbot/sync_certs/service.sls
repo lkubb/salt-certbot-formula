@@ -16,9 +16,17 @@ sync_certs service is running:
       - sls: {{ sls_sync_certs_config }}
 
 Certificates are synced now once:
-  module.run:
-    - service.start:
-      - name: sync_certs.service
+  cmd.run:
+    # This form ensures only the first connection has to be untrusted
+    # if the host key was not specified.
+    - name: >-
+        rsync -aiz -e
+        "ssh {{- ' -o StrictHostKeyChecking=no' if not certbot.sync_certs.from_host_key and not salt["ssh.check_known_host"](user=root, hostname=certbot.sync_certs.from) }}
+        -i '{{ certbot.lookup.sync_certs_ssh_keyfile }}'"
+        certsync@{{ certbot.sync_certs.from }}:* {{ certbot.sync_certs.to }}/
+  # module.run:
+  #   - service.start:
+  #     - name: sync_certs.service
     - onchanges:
       - sync_certs private key is present
       - sync_certs script is present
