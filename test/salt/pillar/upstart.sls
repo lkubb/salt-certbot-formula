@@ -15,12 +15,16 @@ certbot:
       - python3-virtualenv
     pkg:
       name: certbot
+    rrsync_path: /usr/share/doc/rsync/scripts/rrsync
+    rsync: rsync
+    sync_certs_ssh_keyfile: /root/.ssh/sync_certs
   cert_config:
     default:
       auth: standalone
       install: false
       options: {}
   certs: {}
+  certsync: {}
   config:
     agree-tos: true
     email: foo@example.com
@@ -33,6 +37,10 @@ certbot:
   renew:
     rand_delay: 1h
     timer: daily
+  sync_certs:
+    from: null
+    ssh_privkey_pillar: null
+    to: /etc/letsencrypt
   version: latest
 
   tofs:

@@ -12,3 +12,6 @@ include:
 {%- if certbot.ocsp_fetcher.install %}
   - .ocsp_fetcher
 {%- endif %}
+{%- if certbot.certsync %}
+  - .certsync
+{%- endif %}

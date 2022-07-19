@@ -1,0 +1,6 @@
+# This file is managed by Salt.
+# Manual changes might be overwritten.
+
+{%  for cert in certbot.certsync %}
+command="$HOME/bin/rrsync -ro ~/{{ cert }}/",no-agent-forwarding,no-port-forwarding,no-pty,no-user-rc,no-X11-forwarding {{ certbot.certsync[cert] }}
+{%- endfor %}

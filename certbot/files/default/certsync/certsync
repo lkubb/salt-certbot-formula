@@ -1,0 +1,12 @@
+{%- set home = salt["user.info"]("certsync").home -%}
+
+#!/bin/bash
+
+for d in $(find /etc/letsencrypt/live/* -maxdepth 0 -type d); do
+    domain=$(basename $d)
+    mkdir -p {{ home }}/$domain/{archive,live}
+    chmod 700 {{ home }}/$domain/*
+    rsync -a /etc/letsencrypt/live/$domain {{ home }}/$domain/live
+    rsync -a /etc/letsencrypt/archive/$domain {{ home }}/$domain/archive
+    chown -R certsync:certsync {{ home }}/$domain
+done

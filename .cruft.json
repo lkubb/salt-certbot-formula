@@ -32,7 +32,10 @@
         "pip_install_path": "/opt/letsencrypt",
         "pip_reqs": [
           "python3-virtualenv"
-        ]
+        ],
+        "rsync": "rsync",
+        "rrsync_path": "/usr/share/doc/rsync/scripts/rrsync",
+        "sync_certs_ssh_keyfile": "/root/.ssh/sync_certs"
       },
       "_settings": {
         "cert_config": {
@@ -43,6 +46,7 @@
           }
         },
         "certs": {},
+        "certsync": {},
         "config": {
           "agree-tos": true,
           "email": "foo@example.com"
@@ -57,6 +61,11 @@
         "renew": {
           "timer": "daily",
           "rand_delay": "1h"
+        },
+        "sync_certs": {
+          "from": null,
+          "ssh_privkey_pillar": null,
+          "to": "/etc/letsencrypt"
         },
         "version": "latest"
       },
