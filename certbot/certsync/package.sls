@@ -22,6 +22,7 @@ rrsync script is present in user dir:
     - user: certsync
     - group: certsync
     - mode: '0744'
+    - makedirs: true
     - require:
       - pkg: {{ certbot.lookup.rsync }}
 
@@ -53,13 +54,13 @@ Certsync service is installed:
   file.managed:
     - names:
       - /etc/systemd/system/certsync.service:
-        - source: {{ files_switch(['certsync/certsync.service', 'certsync.service.j2'],
+        - source: {{ files_switch(['certsync/certsync.service', 'certsync/certsync.service.j2'],
                                   lookup='Certsync service is installed',
                                   indent_width=10
                      )
                   }}
       - /etc/systemd/system/certsync.timer:
-        - source: {{ files_switch(['certsync/certsync.timer', 'certsync.timer.j2'],
+        - source: {{ files_switch(['certsync/certsync.timer', 'certsync/certsync.timer.j2'],
                                   lookup='Certsync timer is installed',
                                   indent_width=10
                      )

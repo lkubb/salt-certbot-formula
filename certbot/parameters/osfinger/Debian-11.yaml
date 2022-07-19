@@ -1,0 +1,7 @@
+# -*- coding: utf-8 -*-
+# vim: ft=yaml
+---
+values:
+  lookup:
+    rrsync_path: /usr/share/rsync/scripts/rrsync
+...

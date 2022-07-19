@@ -4,7 +4,7 @@ Description=Fetch OCSP responses for all certificates issued with Certbot
 [Service]
 Type=oneshot
 
-{%- if not salt["cmd.retcode"]('currentver=$(systemd --version | sed -E 's/systemd ([0-9]+).*$/\1/p' | head -n 1); requiredver="244"; [ "$(printf "%s\n" "$requiredver" "$currentver" | sort -V | head -n1)" = "$requiredver" ]') %}
+{%- if not salt["cmd.retcode"]('currentver=$(systemd --version | sed -E "s/systemd ([0-9]+).*$/\1/p" | head -n 1); requiredver="244"; [ "$(printf \"%s\n\" \"$requiredver\" \"$currentver\" | sort -V | head -n1)" = "$requiredver" ]', python_shell=true) %}
 
 # When systemd v244+ is available, this should be uncommented to enable retries
 # on failure.
@@ -13,4 +13,4 @@ Restart=on-failure
 
 User=root
 Group=root
-ExecStart=/usr/local/bin/certbot-ocsp-fetcher -o '{{ certbot.ocsp_fetcher.nginx_conf | path_join certbot.ocsp_fetcher.subdir }}'
+ExecStart=/usr/local/bin/certbot-ocsp-fetcher -o '{{ certbot.ocsp_fetcher.nginx_conf | path_join(certbot.ocsp_fetcher.subdir) }}'

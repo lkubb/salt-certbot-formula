@@ -14,5 +14,6 @@ certbot-ocsp-fetcher is removed:
       - /usr/local/bin/certbot-ocsp-fetcher
       - /etc/systemd/system/certbot-ocsp-fetcher.service
       - /etc/systemd/system/certbot-ocsp-fetcher.timer
+      - {{ certbot.ocsp_fetcher.nginx_conf | path_join(certbot.ocsp_fetcher.subdir) }}
     - require:
       - sls: {{ sls_ocsp_service_clean }}
