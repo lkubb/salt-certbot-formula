@@ -37,7 +37,10 @@ def present(name, domains=None, options=None, auth="standalone", install=False, 
         Mapping of options, e.g. {webroot-path: /var/www/example.com}.
         This does not support more advanced configuration options such as
         different webroots for different domains on the same certificate.
-        You will need to use the long forms prefixed with a double dash.
+        You will need to use the long forms that can be prefixed with
+        a double dash.
+        If ``webroot`` is specified as auth and you did not include a
+        webroot-path, it will default to ``/var/www/<first domain>``.
 
     auth
         Plugin to use as authenticator. Defaults to ``standalone``.
