@@ -3,30 +3,58 @@
 # yamllint disable rule:comments-indentation
 ---
 certbot:
-
+    # Define configurations for certbot.present.
   cert_config:
+      # This is the default for certificates without definitions.
+      # Every cert you define in certs can have a corresponding key here.
     default:
+        # Authenticator module. `false` to disable.
       auth: standalone
+        # Installation module. `false` to disable.
       install: false
+        # Options to pass to `certbot run` command.
+        # Specify them as <option>: <value> where <option> is the
+        # long form without -- in front.
       options: {}
+    # Mapping of certificate name to list of domains it should be valid for.
+    # If the list is empty, the key will be taken as the only domain.
   certs: {}
+    # Mapping of cert to pubkey of the client that is allowed to pull the
+    # certificate. If this is left empty, the necessary infrastructure will
+    # not be installed automatically.
   certsync: {}
+    # Certbot CLI configuration. These defaults are necessary for unattended
+    # operation. Please specify your mail address to receive expiration notifications.
   config:
     agree-tos: true
     email: foo@example.com
+    # `pip` for latest (recommended by certbot) or pkg (system package)
   install_method: pip
+    # Install `nginx-ocsp-fetcher` to automatically retrieve and cache OCSP responses.
   ocsp_fetcher:
     install: false
+      # Root dir that will contain the directory containing the responses.
     nginx_conf: /etc/nginx
+      # Directory inside nginx_conf that will contain the responses.
     subdir: ocsp-cache
+    # Additional packages that should be installed in the certbot venv if `pip`
+    # is selected as installation method.
   pip_pkgs: []
+    # This formula also installs the renew service and timer provided by certbot.
   renew:
     rand_delay: 1h
     timer: daily
+    # This configuration is for downstream clients that pull certificates
+    # from the host that runs certbot. The sharing part might have fit better
+    # into a separate formula @TODO.
   sync_certs:
+      # IP/hostname of host running certbot
     from: null
+      # Pillar key that contains the private key needed to pull certificates.
     ssh_privkey_pillar: null
+      # Targt directory where certificates should be synced to.
     to: /etc/letsencrypt
+    # Select a specific certbot version that should be installed.
   version: latest
 
   lookup:
