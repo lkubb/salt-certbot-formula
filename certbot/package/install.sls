@@ -60,12 +60,8 @@ Certbot renew unit files are available:
         certbot: {{ certbot | json }}
 {%- endif %}
 
+# This syncs all modules. Specifying a whitelist removes all
+# other modules.
 Custom Certbot modules are synced:
-  module.run:
-    # sync_all with whitelist syncs all unspecified types
-    - saltutil.sync_modules:
-      - refresh: true
-      - extmod_whitelist: certbot
-    - saltutil.sync_states:
-      - refresh: true
-      - extmod_whitelist: certbot
+  saltutil.sync_all:
+    - refresh: true
