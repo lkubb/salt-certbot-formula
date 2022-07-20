@@ -14,3 +14,10 @@ certbot-ocsp-fetcher-service-running-service-running:
     - enable: True
     - require:
       - sls: {{ sls_ocsp_package_install }}
+
+OCSP cache is updated directly on changes:
+  module.run:
+    - service.start:
+      - name: certbot-ocsp-fetcher.service
+    - onchanges:
+      - OCSP cache dir is present
