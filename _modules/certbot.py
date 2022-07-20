@@ -160,16 +160,16 @@ def list_certs(binpath=None):
     return _list_certificates(binpath)
 
 
-def exists(name, binpath=None):
+def info(name, binpath=None):
     """
-    Check if a certificate with this name exists.
+    Return parsed information about a certificate.
     Mind that the name might be different from the domain.
 
     CLI Example:
 
     .. code-block:: bash
 
-        salt '*' certbot.exists www.example.com
+        salt '*' certbot.info www.example.com
 
     name
         Name of the certificate to check.
@@ -179,7 +179,7 @@ def exists(name, binpath=None):
     """
     for cert in list_certs(binpath):
         if cert["name"] == name:
-            return True
+            return cert
     return False
 
 

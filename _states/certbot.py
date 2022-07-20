@@ -23,8 +23,9 @@ def present(
     """
     Request a certificate.
 
-    This only manages the creation. Once it has been created, the options
-    will not be modified.
+    This only manages the creation and included domains.
+    Once it has been created, modified options will not result
+    in an updated certificate.
 
     name
         Name of the certificate to retrieve. If domains is unspecified,
@@ -58,16 +59,23 @@ def present(
     ret = {"name": name, "result": True, "comment": "", "changes": {}}
 
     try:
-        if __salt__["certbot.exists"](name, binpath):
+        current = __salt__["certbot.info"](name, binpath) or {"domains": []}
+        missing = set(domains or [name]) - set(current["domains"])
+        superfluous = set(current["domains"]) - set(domains or [name])
+        verb = "create" if not current else "update"
+
+        if current and not missing and not superfluous:
             ret["result"] = True
-            ret["comment"] = "A certificate named '{}' already exists.".format(name)
-        elif __opts__["test"]:
+            ret["comment"] = f"A certificate named '{name}' already exists with the correct domains."
+            return ret
+
+        if __opts__["test"]:
             ret["result"] = None
-            ret["comment"] = "Certificate '{}' would have been created.".format(name)
-            ret["changes"] = {"created": name}
+            ret["comment"] = f"Certificate '{name}' would have been {verb}d."
+            ret["changes"] = {f"{verb}d": name, "added": list(missing), "removed": list(superfluous)}
         elif __salt__["certbot.get"](name, domains, options, auth, install, binpath):
-            ret["comment"] = "Certificate '{}' has been created.".format(name)
-            ret["changes"] = {"created": name}
+            ret["comment"] = f"Certificate '{name}' has been {verb}d."
+            ret["changes"] = {f"{verb}d": name, "added": list(missing), "removed": list(superfluous)}
         else:
             ret["result"] = False
             ret[
@@ -96,7 +104,7 @@ def absent(name, binpath=None):
     ret = {"name": name, "result": True, "comment": "", "changes": {}}
 
     try:
-        if not __salt__["certbot.exists"](name, binpath):
+        if not __salt__["certbot.info"](name, binpath):
             ret["result"] = True
             ret["comment"] = "A certificate named '{}' does not exist.".format(name)
         elif __opts__["test"]:
