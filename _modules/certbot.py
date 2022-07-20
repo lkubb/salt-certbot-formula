@@ -14,12 +14,81 @@ import salt.utils.yaml
 
 __virtualname__ = "certbot"
 
+CERTBOT_STATE_MODIFIER_CMDS = [
+    "certonly",
+    "delete",
+    "renew",
+    "run",
+    "revoke",
+]
+
 
 def __virtual__():
     """
     Does not test for existence of certbot atm. @FIXME
     """
     return __virtualname__
+
+
+def _list_certificates(binpath=None):
+    """
+    Helper function which leverages __context__ to keep from running
+    ``certbot certificates`` more than once if unnecessary.
+    The function is generally quite slow.
+    """
+
+    contextkey = f"certbot._certbot_certificates"
+
+    if contextkey not in __context__:
+        out = cli(["certificates"], binpath)
+        parsed = _parse_certificates(out["stdout"])
+        __context__[contextkey] = parsed
+
+    return __context__[contextkey]
+
+
+def _parse_certificates(out):
+    """
+    Parse the output of ``certbot certificates``.
+    """
+    certs = []
+
+    if "No certificates found." in out:
+        return certs
+    elif "Found the following certs:" in out:
+        # Ugly, but as lazy as not implementing json output :)
+        certsdata = out.split("Found the following certs:")[1].strip()
+
+        for cert in certsdata.split("Certificate Name: "):
+            if not cert.strip():
+                continue
+            name, *data = cert.strip().splitlines()
+            parsed = {"name": name}
+            for line in [x.strip() for x in data]:
+                if line.startswith("Domains: "):
+                    parsed["domains"] = line[9:].split(" ")
+                elif line.startswith("Expiry Date: "):
+                    parsed["expires"] = line[13:]
+                elif line.startswith("Certificate Path: "):
+                    parsed["path_cert"] = line[18:]
+                elif line.startswith("Private Key Path: "):
+                    parsed["path_priv"] = line[18:]
+            certs.append(parsed)
+        return certs
+
+    raise CommandExecutionError(
+        "Couldn't parse the following output:\n\n{}".format(out)
+    )
+
+def _clear_cache():
+    """
+    Should be called after certificates have been modified.
+    """
+
+    contextkey = f"certbot._certbot_certificates"
+
+    if contextkey in __context__:
+        __context__.pop(contextkey)
 
 
 def cli(cmd=None, binpath=None, raise_error=True):
@@ -67,10 +136,14 @@ def cli(cmd=None, binpath=None, raise_error=True):
             )
         )
 
+    # Certbot defaults to `run`, which would not be caught here if unspecified.
+    if cmd[0] in CERTBOT_STATE_MODIFIER_CMDS:
+        _clear_cache()
+
     return out
 
 
-def list(binpath=None):
+def list_certs(binpath=None):
     """
     List certificates.
 
@@ -83,38 +156,8 @@ def list(binpath=None):
     binpath
         Path to the ``certbot`` binary. Can be empty if it's in $PATH.
     """
-    cmd = ["certificates"]
 
-    out = cli(cmd, binpath)
-
-    certs = []
-
-    if "No certificates found." in out["stdout"]:
-        return certs
-    elif "Found the following certs:" in out["stdout"]:
-        # Ugly, but was as lazy as someone not implementing json output :)
-        certsdata = out["stdout"].split("Found the following certs:")[1].strip()
-
-        for cert in certsdata.split("Certificate Name: "):
-            if not cert.strip():
-                continue
-            name, *data = cert.strip().splitlines()
-            parsed = {"name": name}
-            for line in [x.strip() for x in data]:
-                if line.startswith("Domains: "):
-                    parsed["domains"] = line[9:].split(" ")
-                elif line.startswith("Expiry Date: "):
-                    parsed["expires"] = line[13:]
-                elif line.startswith("Certificate Path: "):
-                    parsed["path_cert"] = line[18:]
-                elif line.startswith("Private Key Path: "):
-                    parsed["path_priv"] = line[18:]
-            certs.append(parsed)
-        return certs
-
-    raise CommandExecutionError(
-        "Couldn't parse the following output:\n\n{}".format(out["stdout"])
-    )
+    return _list_certificates(binpath)
 
 
 def exists(name, binpath=None):
@@ -134,7 +177,7 @@ def exists(name, binpath=None):
     binpath
         Path to the ``certbot`` binary. Can be empty if it's in $PATH.
     """
-    for cert in list(binpath):
+    for cert in list_certs(binpath):
         if cert["name"] == name:
             return True
     return False
