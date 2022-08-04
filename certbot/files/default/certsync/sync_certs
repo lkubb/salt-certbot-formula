@@ -12,10 +12,13 @@ else
 fi
 
 if [ $changed -eq 1 ]; then
+{%- if "semanage" | which %}
+    restorecon -R '{{ certbot.sync_certs.to }}'
+{%- endif %}
 {%- if "nginx" | which %}
     systemctl reload nginx
 {%- endif %}
-{%- if "semanage" | which %}
-    restorecon -R '{{ certbot.sync_certs.to }}'
+{%- if "lighttpd" | which %}
+    systemctl reload lighttpd
 {%- endif %}
 fi
