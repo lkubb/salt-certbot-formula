@@ -12,10 +12,10 @@ else
 fi
 
 if [ $changed -eq 1 ]; then
-{%- if salt["cmd.run_stdout"]("command -v nginx") %}
+{%- if "nginx" | which %}
     systemctl reload nginx
 {%- endif %}
-{%- if salt["cmd.run_stdout"]("command -v semanage") %}
+{%- if "semanage" | which %}
     restorecon -R '{{ certbot.sync_certs.to }}'
 {%- endif %}
 fi

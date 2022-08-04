@@ -67,7 +67,10 @@ Certsync service is installed:
                   }}
     - user: root
     - group: {{ certbot.lookup.rootgroup }}
-    - mode: '0700'
+    - mode: '0755'
     - makedirs: true
+    - template: jinja
+    - context:
+        certbot: {{ certbot | json }}
     - require:
       - file: /usr/local/bin/certsync

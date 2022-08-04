@@ -17,6 +17,8 @@ sync_certs script is present:
                  )
               }}
     - template: jinja
+    - context:
+        certbot: {{ certbot | json }}
     - user: root
     - group: {{ certbot.lookup.rootgroup }}
     - mode: '0744'
@@ -28,13 +30,13 @@ sync_certs service is installed:
   file.managed:
     - names:
       - /etc/systemd/system/sync_certs.service:
-        - source: {{ files_switch(['certsync/sync_certs.service', 'sync_certs.service.j2'],
+        - source: {{ files_switch(['certsync/sync_certs.service', 'certsync/sync_certs.service.j2'],
                                   lookup='sync_certs service is installed',
                                   indent_width=10
                      )
                   }}
       - /etc/systemd/system/sync_certs.timer:
-        - source: {{ files_switch(['certsync/sync_certs.timer', 'sync_certs.timer.j2'],
+        - source: {{ files_switch(['certsync/sync_certs.timer', 'certsync/sync_certs.timer.j2'],
                                   lookup='sync_certs timer is installed',
                                   indent_width=10
                      )
@@ -43,6 +45,9 @@ sync_certs service is installed:
     - group: {{ certbot.lookup.rootgroup }}
     - mode: '0700'
     - makedirs: true
+    - template: jinja
+    - context:
+        certbot: {{ certbot | json }}
     - require:
       - file: /usr/local/bin/sync_certs
 
@@ -52,7 +57,7 @@ sync_certs target dir is present:
     - user: root
     - group: {{ certbot.lookup.rootgroup }}
     - makedirs: true
-{%- if salt["cmd.run"]("command -v semanage") %}
+{%- if "semanage" | which %}
   selinux.fcontext_policy_present:
     - name: '%{_sysconfdir}/(letsencrypt|certbot)/(live|archive)(/.*)?'
     - sel_type: cert_t
