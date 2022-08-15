@@ -4,7 +4,7 @@ changed=0
 rsync_out=$(rsync -aiz -e "ssh -i '{{ certbot.lookup.sync_certs_ssh_keyfile }}'" certsync@{{ certbot.sync_certs.from }}:* {{ certbot.sync_certs.to }}/)
 
 if [ $? -eq 0 ]; then
-    if [ -n "${RSYNC_COMMAND}" ]; then
+    if [ -n "${rsync_out}" ]; then
         changed=1
     fi
 else

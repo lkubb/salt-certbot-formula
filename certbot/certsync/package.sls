@@ -67,7 +67,7 @@ Certsync service is installed:
                   }}
     - user: root
     - group: {{ certbot.lookup.rootgroup }}
-    - mode: '0755'
+    - mode: '0644'
     - makedirs: true
     - template: jinja
     - context:
