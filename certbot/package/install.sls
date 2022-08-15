@@ -25,6 +25,9 @@ Certbot is installed:
 {%-   for pkg in certbot.pip_pkgs %}
       - {{ pkg }}
 {%-   endfor %}
+  file.symlink:
+    - name: /usr/local/bin/certbot
+    - target: {{ certbot.lookup.pip_install_path | path_join("bin", "certbot") }}
 {%- else %}
 
 Certbot is installed:
