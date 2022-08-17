@@ -23,5 +23,4 @@ Certsync user is absent with files:
     - name: certsync
     - purge: true
     - require:
-    - require:
       - Certsync service is dead
