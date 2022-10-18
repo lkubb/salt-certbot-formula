@@ -62,3 +62,10 @@ sync_certs target dir is present:
     - name: '%{_sysconfdir}/(letsencrypt|certbot)/(live|archive)(/.*)?'
     - sel_type: cert_t
 {%- endif %}
+
+Root SSH confdir is present:
+  file.directory:
+    - name: {{ salt["user.info"]("root").home }}
+    - user: root
+    - group: {{ certbot.lookup.rootgroup }}
+    - mode: '0700'

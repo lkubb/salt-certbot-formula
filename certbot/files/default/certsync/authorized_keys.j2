@@ -1,6 +1,13 @@
 # This file is managed by Salt.
 # Manual changes might be overwritten.
 
-{%  for cert in certbot.certsync %}
-command="$HOME/bin/rrsync -ro ~/{{ cert }}/",no-agent-forwarding,no-port-forwarding,no-pty,no-user-rc,no-X11-forwarding {{ certbot.certsync[cert] }}
+{%- set mine_pubkeys = salt["mine.get"]("certsync_role:client", "certsync_pubkey", tgt_type="pillar") %}
+
+{%  for cert, client in certbot.certsync | dictsort %}
+{%-   if client is mapping and client["minion"] in mine_pubkeys %}
+{%-     set client = mine_pubkeys[client["minion"]] %}
+{%-   endif %}
+{%-   if client is string %}
+command="$HOME/bin/rrsync -ro ~/{{ cert }}/",no-agent-forwarding,no-port-forwarding,no-pty,no-user-rc,no-X11-forwarding {{ client.strip() }}
+{%-   endif %}
 {%- endfor %}

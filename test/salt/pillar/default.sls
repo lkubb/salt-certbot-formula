@@ -40,6 +40,8 @@ certbot:
   sync_certs:
     from: null
     from_host_key: null
+    key_bits: null
+    key_type: ed25519
     ssh_privkey_pillar: null
     to: /etc/letsencrypt
   version: latest

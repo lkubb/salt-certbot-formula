@@ -13,6 +13,7 @@ sync_certs files are absent:
   file.absent:
     - names:
       - {{ certbot.lookup.sync_certs_ssh_keyfile }}
+      - {{ certbot.lookup.sync_certs_ssh_keyfile }}.pub
       - /usr/local/bin/sync_certs
       - /etc/systemd/system/sync_certs.service
       - /etc/systemd/system/sync_certs.timer

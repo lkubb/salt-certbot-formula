@@ -19,7 +19,8 @@ certbot:
     # Mapping of certificate name to list of domains it should be valid for.
     # If the list is empty, the key will be taken as the only domain.
   certs: {}
-    # Mapping of cert to pubkey of the client that is allowed to pull the
+    # Mapping of cert to pubkey of the client (or mapping `minion: <minion_id>`
+    # when using the mine to distribute pubkeys) that is allowed to pull the
     # certificate. If this is left empty, the necessary infrastructure will
     # not be installed automatically.
   certsync: {}
@@ -53,7 +54,15 @@ certbot:
       # Entry for the upstream host in known_hosts file. If unspecified, the first
       # connection will be untrusted.
     from_host_key: null
+      # Key bitlength (ssh-keygen -b parameter) when generating minion keys
+    key_bits: null
+      # Key type parameter (-t) for ssh-keygen when generating minion keys
+    key_type: ed25519
       # Pillar key that contains the private key needed to pull certificates.
+      # If left empty, a new key will be generated and its pubkey sent to the mine.
+      # For this to work, your minions need the pillar value `certsync_role: client`,
+      # your distributing server `certsync_role: server` and you need to explicitly
+      # associate minion IDs with certificates in certbot:certsync.
     ssh_privkey_pillar: null
       # Targt directory where certificates should be synced to.
     to: /etc/letsencrypt

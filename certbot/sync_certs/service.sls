@@ -27,6 +27,5 @@ Certificates are synced now once:
   # module.run:
   #   - service.start:
   #     - name: sync_certs.service
-    - onchanges:
-      - sync_certs private key is present
-      - sync_certs script is present
+    - unless:
+      - test -n "$(ls -A '{{ certbot.sync_certs.to }}')"
