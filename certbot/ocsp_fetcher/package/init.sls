@@ -1,5 +1,8 @@
-# -*- coding: utf-8 -*-
 # vim: ft=sls
+
+{#-
+    Installs ``certbot-ocsp-fetcher`` + service/timer unit files.
+#}
 
 include:
   - .install

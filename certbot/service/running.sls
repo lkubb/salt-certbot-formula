@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # vim: ft=sls
 
 {%- set tplroot = tpldir.split('/')[0] %}
@@ -8,7 +7,7 @@
 include:
   - {{ sls_config_file }}
 
-certbot-service-running-service-running:
+certbot autorenew timer is enabled:
   service.running:
     - name: {{ certbot.lookup.service.name }}.timer
     - enable: True

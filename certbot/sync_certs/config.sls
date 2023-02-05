@@ -1,5 +1,9 @@
-# -*- coding: utf-8 -*-
 # vim: ft=sls
+
+{#-
+    Creates an SSH private key and sends its associated
+    public key to the mine for the borg server to recognize it.
+#}
 
 {%- set tplroot = tpldir.split('/')[0] %}
 {%- set sls_sync_certs_package = tplroot ~ ".sync_certs.package" %}

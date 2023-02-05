@@ -1,5 +1,8 @@
-# -*- coding: utf-8 -*-
 # vim: ft=sls
+
+{#-
+    Installs the certbot package only.
+#}
 
 include:
   - .install

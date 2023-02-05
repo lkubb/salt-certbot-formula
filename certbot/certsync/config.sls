@@ -1,5 +1,8 @@
-# -*- coding: utf-8 -*-
 # vim: ft=sls
+
+{#-
+    Manages ``authorized_keys`` configuration for the certsync user.
+#}
 
 {%- set tplroot = tpldir.split('/')[0] %}
 {%- set sls_certsync_package = tplroot ~ ".certsync.package" %}

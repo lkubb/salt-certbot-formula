@@ -1,5 +1,8 @@
-# -*- coding: utf-8 -*-
 # vim: ft=sls
+
+{#-
+    Ensures configured certificates are present.
+#}
 
 include:
   - .present

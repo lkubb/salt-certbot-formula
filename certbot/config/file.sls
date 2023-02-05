@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # vim: ft=sls
 
 {%- set tplroot = tpldir.split('/')[0] %}
@@ -9,17 +8,17 @@
 include:
   - {{ sls_package_install }}
 
-certbot-config-file-file-managed:
+Certbot configuration is managed:
   file.managed:
     - name: {{ certbot.lookup.config }}
-    - source: {{ files_switch(['cli.ini.j2'],
-                              lookup='certbot-config-file-file-managed'
-                 )
+    - source: {{ files_switch(["cli.ini", "cli.ini.j2"],
+                              lookup="Certbot configuration is managed"
+                  )
               }}
-    - mode: 644
+    - mode: '0644'
     - user: root
     - group: {{ certbot.lookup.rootgroup }}
-    - makedirs: True
+    - makedirs: true
     - template: jinja
     - require:
       - sls: {{ sls_package_install }}

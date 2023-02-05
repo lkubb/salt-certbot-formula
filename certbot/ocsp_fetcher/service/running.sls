@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # vim: ft=sls
 
 {%- set tplroot = tpldir.split('/')[0] %}
@@ -8,10 +7,10 @@
 include:
   - {{ sls_ocsp_package_install }}
 
-certbot-ocsp-fetcher-service-running-service-running:
+certbot-ocsp-fetcher is running:
   service.running:
     - name: certbot-ocsp-fetcher.timer
-    - enable: True
+    - enable: true
     - require:
       - sls: {{ sls_ocsp_package_install }}
 

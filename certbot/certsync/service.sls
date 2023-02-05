@@ -1,5 +1,11 @@
-# -*- coding: utf-8 -*-
 # vim: ft=sls
+
+{#-
+    Ensures the certsync timer is enabled.
+    Syncs certificates during the first run
+    (specifically when ``authorized_keys`` or the certsync
+    script states report changes).
+#}
 
 {%- set tplroot = tpldir.split('/')[0] %}
 {%- set sls_certsync_config = tplroot ~ ".certsync.config" %}

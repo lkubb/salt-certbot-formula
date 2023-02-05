@@ -1,5 +1,9 @@
-# -*- coding: utf-8 -*-
 # vim: ft=sls
+
+{#-
+    Removes the certbot package.
+    Has a depency on `certbot.config.clean`_.
+#}
 
 {%- set tplroot = tpldir.split('/')[0] %}
 {%- set sls_config_clean = tplroot ~ '.config.clean' %}
@@ -21,7 +25,7 @@ Certbot is absent:
     - name: {{ certbot.lookup.pip_install_path }}
 {%- else %}
 
-certbot-package-clean-pkg-removed:
+Certbot is removed:
   pkg.removed:
     - name: {{ certbot.lookup.pkg.name }}
     - require:

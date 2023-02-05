@@ -1,5 +1,8 @@
-# -*- coding: utf-8 -*-
 # vim: ft=sls
+
+{#-
+    Removes ``certbot-ocsp-fetcher`` + service/timer unit files.
+#}
 
 {%- set tplroot = tpldir.split('/')[0] %}
 {%- set sls_ocsp_service_clean = tplroot ~ ".ocsp_fetcher.service.clean" %}

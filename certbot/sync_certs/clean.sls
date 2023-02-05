@@ -1,5 +1,11 @@
-# -*- coding: utf-8 -*-
 # vim: ft=sls
+
+{#-
+    Undoes everything `certbot.sync_certs`_ does, in particular
+    disables the sync_certs timer, removes SSH keys and sync_certs
+    service/timer unit files. Removes the borg server from known hosts.
+    Does *not* remove rsync.
+#}
 
 {%- set tplroot = tpldir.split('/')[0] %}
 {%- from tplroot ~ "/map.jinja" import mapdata as certbot with context %}

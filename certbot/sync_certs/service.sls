@@ -1,5 +1,9 @@
-# -*- coding: utf-8 -*-
 # vim: ft=sls
+
+{#-
+    Enables the sync_certs timer and tries to synchronize
+    certificates once.
+#}
 
 {%- set tplroot = tpldir.split('/')[0] %}
 {%- set sls_sync_certs_config = tplroot ~ ".sync_certs.config" %}
@@ -21,7 +25,9 @@ Certificates are synced now once:
     # if the host key was not specified.
     - name: >-
         rsync -aiz -e
-        "ssh {{- ' -o StrictHostKeyChecking=no' if not certbot.sync_certs.from_host_key and "add" == salt["ssh.check_known_host"](user="root", hostname=certbot.sync_certs.from) }}
+        "ssh {{- ' -o StrictHostKeyChecking=no'
+                    if not certbot.sync_certs.from_host_key
+                    and "add" == salt["ssh.check_known_host"](user="root", hostname=certbot.sync_certs.from) }}
         -i '{{ certbot.lookup.sync_certs_ssh_keyfile }}'"
         certsync@{{ certbot.sync_certs.from }}:* {{ certbot.sync_certs.to }}/
   # module.run:
