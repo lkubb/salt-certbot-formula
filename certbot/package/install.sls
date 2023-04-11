@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
 # vim: ft=sls
 
-{%- set tplroot = tpldir.split('/')[0] %}
+{%- set tplroot = tpldir.split("/")[0] %}
 {%- from tplroot ~ "/map.jinja" import mapdata as certbot with context %}
 {%- from tplroot ~ "/libtofs.jinja" import files_switch with context %}
 
@@ -39,21 +38,21 @@ Certbot renew unit files are available:
   file.managed:
     - names:
       - /etc/systemd/system/{{ certbot.lookup.service.name }}.service:
-        - source: {{ files_switch(['certbot.service.j2'],
-                                  lookup='Certbot renew service is installed',
+        - source: {{ files_switch(["certbot.service.j2"],
+                                  lookup="Certbot renew service is installed",
                                   indent_width=10,
                      )
                   }}
       - /etc/systemd/system/{{ certbot.lookup.service.name }}.timer:
-        - source: {{ files_switch(['certbot.timer.j2'],
-                                  lookup='Certbot renew timer is installed',
+        - source: {{ files_switch(["certbot.timer.j2"],
+                                  lookup="Certbot renew timer is installed",
                                   indent_width=10,
                      )
                   }}
-    - mode: 644
+    - mode: '0644'
     - user: root
     - group: {{ certbot.lookup.rootgroup }}
-    - makedirs: True
+    - makedirs: true
     - template: jinja
     - require:
       - Certbot is installed

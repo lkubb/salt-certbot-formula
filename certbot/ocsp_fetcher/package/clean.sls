@@ -4,7 +4,7 @@
     Removes ``certbot-ocsp-fetcher`` + service/timer unit files.
 #}
 
-{%- set tplroot = tpldir.split('/')[0] %}
+{%- set tplroot = tpldir.split("/")[0] %}
 {%- set sls_ocsp_service_clean = tplroot ~ ".ocsp_fetcher.service.clean" %}
 {%- from tplroot ~ "/map.jinja" import mapdata as certbot with context %}
 

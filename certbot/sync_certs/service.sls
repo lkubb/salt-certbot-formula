@@ -5,7 +5,7 @@
     certificates once.
 #}
 
-{%- set tplroot = tpldir.split('/')[0] %}
+{%- set tplroot = tpldir.split("/")[0] %}
 {%- set sls_sync_certs_config = tplroot ~ ".sync_certs.config" %}
 {%- from tplroot ~ "/map.jinja" import mapdata as certbot with context %}
 

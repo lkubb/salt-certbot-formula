@@ -4,7 +4,7 @@
     Installs ``rsync`` and sync_certs service.
 #}
 
-{%- set tplroot = tpldir.split('/')[0] %}
+{%- set tplroot = tpldir.split("/")[0] %}
 {%- from tplroot ~ "/map.jinja" import mapdata as certbot with context %}
 {%- from tplroot ~ "/libtofs.jinja" import files_switch with context %}
 
@@ -15,8 +15,8 @@ Rsync is installed:
 sync_certs script is present:
   file.managed:
     - name: /usr/local/bin/sync_certs
-    - source: {{ files_switch(['certsync/sync_certs'],
-                              lookup='sync_certs script is present'
+    - source: {{ files_switch(["certsync/sync_certs"],
+                              lookup="sync_certs script is present"
                  )
               }}
     - template: jinja
@@ -33,14 +33,14 @@ sync_certs service is installed:
   file.managed:
     - names:
       - /etc/systemd/system/sync_certs.service:
-        - source: {{ files_switch(['certsync/sync_certs.service', 'certsync/sync_certs.service.j2'],
-                                  lookup='sync_certs service is installed',
+        - source: {{ files_switch(["certsync/sync_certs.service", "certsync/sync_certs.service.j2"],
+                                  lookup="sync_certs service is installed",
                                   indent_width=10
                      )
                   }}
       - /etc/systemd/system/sync_certs.timer:
-        - source: {{ files_switch(['certsync/sync_certs.timer', 'certsync/sync_certs.timer.j2'],
-                                  lookup='sync_certs timer is installed',
+        - source: {{ files_switch(["certsync/sync_certs.timer", "certsync/sync_certs.timer.j2"],
+                                  lookup="sync_certs timer is installed",
                                   indent_width=10
                      )
                   }}

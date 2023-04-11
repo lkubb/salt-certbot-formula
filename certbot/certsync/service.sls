@@ -7,7 +7,7 @@
     script states report changes).
 #}
 
-{%- set tplroot = tpldir.split('/')[0] %}
+{%- set tplroot = tpldir.split("/")[0] %}
 {%- set sls_certsync_config = tplroot ~ ".certsync.config" %}
 {%- from tplroot ~ "/map.jinja" import mapdata as certbot with context %}
 
