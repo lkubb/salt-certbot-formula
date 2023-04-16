@@ -40,6 +40,21 @@ Has a dependency on `certbot.config`_.
 Ensures configured certificates are present.
 
 
+``certbot.ocsp_fetcher``
+^^^^^^^^^^^^^^^^^^^^^^^^
+Installs ``certbot-ocsp-fetcher`` + service/timer and enables it.
+
+
+``certbot.ocsp_fetcher.package``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Installs ``certbot-ocsp-fetcher`` + service/timer unit files.
+
+
+``certbot.ocsp_fetcher.service``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Enables the ``certbot-ocsp-fetcher`` timer.
+
+
 ``certbot.certsync``
 ^^^^^^^^^^^^^^^^^^^^
 Installs ``rsync`` and configures a dedicated user account
@@ -69,21 +84,6 @@ Ensures the certsync timer is enabled.
 Syncs certificates during the first run
 (specifically when ``authorized_keys`` or the certsync
 script states report changes).
-
-
-``certbot.ocsp_fetcher``
-^^^^^^^^^^^^^^^^^^^^^^^^
-Installs ``certbot-ocsp-fetcher`` + service/timer and enables it.
-
-
-``certbot.ocsp_fetcher.package``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Installs ``certbot-ocsp-fetcher`` + service/timer unit files.
-
-
-``certbot.ocsp_fetcher.service``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Enables the ``certbot-ocsp-fetcher`` timer.
 
 
 ``certbot.sync_certs``
@@ -149,12 +149,6 @@ Disables the certbot autorenew timer.
 Removes managed certificates.
 
 
-``certbot.certsync.clean``
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-Disables the certsync timer, removes configuration, scripts,
-service and user.
-
-
 ``certbot.ocsp_fetcher.clean``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Disables ``certbot-ocsp-fetcher`` timer,
@@ -169,6 +163,12 @@ Removes ``certbot-ocsp-fetcher`` + service/timer unit files.
 ``certbot.ocsp_fetcher.service.clean``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Disables the ``certbot-ocsp-fetcher`` timer.
+
+
+``certbot.certsync.clean``
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+Disables the certsync timer, removes configuration, scripts,
+service and user.
 
 
 ``certbot.sync_certs.clean``
