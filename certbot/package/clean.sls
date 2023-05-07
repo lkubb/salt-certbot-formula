@@ -22,7 +22,9 @@ Certbot renew unit files are absent:
 
 Certbot is absent:
   file.absent:
-    - name: {{ certbot.lookup.pip_install_path }}
+    - names:
+      - {{ certbot.lookup.pip_install_path }}
+      - /usr/local/bin/certbot
 {%- else %}
 
 Certbot is removed:
