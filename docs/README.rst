@@ -180,7 +180,7 @@ uninstalls the package.
 ``certbot.package.clean``
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 Removes the certbot package.
-Has a depency on `certbot.config.clean`_.
+Has a dependency on `certbot.config.clean`_.
 
 
 ``certbot.config.clean``

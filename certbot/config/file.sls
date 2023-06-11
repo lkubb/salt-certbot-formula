@@ -3,7 +3,7 @@
 {%- set tplroot = tpldir.split("/")[0] %}
 {%- set sls_package_install = tplroot ~ ".package.install" %}
 {%- from tplroot ~ "/map.jinja" import mapdata as certbot with context %}
-{%- from tplroot ~ "/libtofs.jinja" import files_switch with context %}
+{%- from tplroot ~ "/libtofsstack.jinja" import files_switch with context %}
 
 include:
   - {{ sls_package_install }}
@@ -11,9 +11,11 @@ include:
 Certbot configuration is managed:
   file.managed:
     - name: {{ certbot.lookup.config }}
-    - source: {{ files_switch(["cli.ini", "cli.ini.j2"],
-                              lookup="Certbot configuration is managed"
-                  )
+    - source: {{ files_switch(
+                    ["cli.ini", "cli.ini.j2"],
+                    config=certbot,
+                    lookup="Certbot configuration is managed",
+                 )
               }}
     - mode: '0644'
     - user: root

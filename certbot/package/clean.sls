@@ -2,7 +2,7 @@
 
 {#-
     Removes the certbot package.
-    Has a depency on `certbot.config.clean`_.
+    Has a dependency on `certbot.config.clean`_.
 #}
 
 {%- set tplroot = tpldir.split("/")[0] %}
