@@ -2,7 +2,7 @@
 
 {%- set tplroot = tpldir.split("/")[0] %}
 {%- from tplroot ~ "/map.jinja" import mapdata as certbot with context %}
-{%- from tplroot ~ "/libtofs.jinja" import files_switch with context %}
+{%- from tplroot ~ "/libtofsstack.jinja" import files_switch with context %}
 
 {%- if "pip" == certbot.install_method %}
 
@@ -38,15 +38,19 @@ Certbot renew unit files are available:
   file.managed:
     - names:
       - /etc/systemd/system/{{ certbot.lookup.service.name }}.service:
-        - source: {{ files_switch(["certbot.service.j2"],
-                                  lookup="Certbot renew service is installed",
-                                  indent_width=10,
+        - source: {{ files_switch(
+                        ["certbot.service", "certbot.service.j2"],
+                        config=certbot,
+                        lookup="Certbot renew service is installed",
+                        indent_width=10,
                      )
                   }}
       - /etc/systemd/system/{{ certbot.lookup.service.name }}.timer:
-        - source: {{ files_switch(["certbot.timer.j2"],
-                                  lookup="Certbot renew timer is installed",
-                                  indent_width=10,
+        - source: {{ files_switch(
+                        ["certbot.timer", "certbot.timer.j2"],
+                        config=certbot,
+                        lookup="Certbot renew timer is installed",
+                        indent_width=10,
                      )
                   }}
     - mode: '0644'

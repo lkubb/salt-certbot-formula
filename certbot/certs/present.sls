@@ -3,7 +3,6 @@
 {%- set tplroot = tpldir.split("/")[0] %}
 {%- set sls_ocsp_service_running = tplroot ~ ".ocsp_fetcher.service.running" %}
 {%- from tplroot ~ "/map.jinja" import mapdata as certbot with context %}
-{%- from tplroot ~ "/libtofs.jinja" import files_switch with context %}
 
 {%- if certbot.ocsp_fetcher %}
 
