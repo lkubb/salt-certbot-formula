@@ -68,3 +68,5 @@ Certbot renew unit files are available:
 Custom Certbot modules are synced:
   saltutil.sync_all:
     - refresh: true
+    - unless:
+      - '{{ ("certbot" in salt["saltutil.list_extmods"]().get("states", [])) | lower }}'
