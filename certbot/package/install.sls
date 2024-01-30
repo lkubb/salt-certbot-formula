@@ -4,19 +4,67 @@
 {%- from tplroot ~ "/map.jinja" import mapdata as certbot with context %}
 {%- from tplroot ~ "/libtofsstack.jinja" import files_switch with context %}
 
-{%- if "pip" == certbot.install_method %}
+{%- if certbot.install_method == "pip" %}
+{%-   set req_pkgs = [certbot.lookup.pkg.reqs.python, certbot.lookup.pkg.reqs.pip] %}
+{%-   do req_pkgs.extend(certbot.lookup.pkg.reqs.certbot) %}
 
-Requisites to install Certbot in virtualenv are installed:
+Certbot required packages are installed:
   pkg.installed:
-    - pkgs: {{ certbot.lookup.pip_reqs | json }}
+    - pkgs: {{ req_pkgs | json }}
+
+{%-   if grains.os_family == "Debian" and (grains.osmajorrelease >=12 or (grains.os == "Ubuntu" and grains.osmajorrelease >=23)) %}
+{#-     Dirty workaround for the system python being marked as externally managed @TODO migrate most to pipx + update pipx modules #}
+
+pipx is installed for certbot:
+  pkg.installed:
+    - name: pipx
+
+Certbot is installed:
+  cmd.run:
+    - name: pipx install certbot
+    - env:
+        PIPX_HOME: /opt/pipx
+        PIPX_BIN_DIR: /usr/local/bin
+        PIPX_MAN_DIR: /usr/local/share/man
+    - unless:
+      - pipx list --short | grep certbot
+    - require:
+      - pkg: pipx
+      - Certbot required packages are installed
+
+{%-   else %}
+{%-     set pip =
+          salt["cmd.which_bin"](["/bin/pip3", "/usr/bin/pip3", "/bin/pip", "/usr/bin/pip"]) or
+          '__slot__:salt:cmd.which_bin(["/bin/pip3", "/usr/bin/pip3", "/bin/pip", "/usr/bin/pip"])'
+%}
+
+Virtualenv is installed for certbot:
+{#-
+    Assume that venv_bin is only set when using pip.
+    This whole house of cards would be unnecessary if
+    the virtualenv module could use the inbuilt venv lib
+#}
+{%-     if not certbot.lookup.venv_bin.startswith("/") %}
+  pkg.installed:
+    - name: {{ certbot.lookup.pkg.reqs.venv.pkg }}
+{%-     else %}
+  pip.installed:
+    - name: {{ certbot.lookup.pkg.reqs.venv.pip }}
+    - bin_env: {{ pip }}
+    - require:
+      - Certbot required packages are installed
+{%-     endif %}
+    - require_in:
+      - Certbot is installed
 
 Certbot is installed:
   virtualenv.managed:
     - name: {{ certbot.lookup.pip_install_path }}
     - python: python3
-    - pip_upgrade: {{ "latest" == certbot.version }}
+    - venv_bin: {{ certbot.lookup.venv_bin }}
+    - pip_upgrade: {{ certbot.version == "latest" }}
     - pip_pkgs:
-{%-   if "latest" != certbot.version %}
+{%-   if certbot.version != "latest" %}
       - certbot=={{ version }}
 {%-   else %}
       - certbot
@@ -27,6 +75,9 @@ Certbot is installed:
   file.symlink:
     - name: /usr/local/bin/certbot
     - target: {{ certbot.lookup.pip_install_path | path_join("bin", "certbot") }}
+    - require:
+      - virtualenv: {{ certbot.lookup.pip_install_path }}
+{%-   endif %}
 {%- else %}
 
 Certbot is installed:

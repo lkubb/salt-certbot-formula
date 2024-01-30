@@ -27,15 +27,22 @@
       "git_username": "lkubb",
       "lookup": {
         "pkg": {
-          "name": "certbot"
+          "name": "certbot",
+          "reqs": {
+            "certbot": ["libaugeas0"],
+            "python": "python3",
+            "pip": "python3-pip",
+            "venv": {
+              "pkg": "python3-virtualenv",
+              "pip": "virtualenv"
+            }
+          }
         },
         "pip_install_path": "/opt/letsencrypt",
-        "pip_reqs": [
-          "python3-virtualenv"
-        ],
         "rsync": "rsync",
         "rrsync_path": "/usr/share/doc/rsync/scripts/rrsync",
-        "sync_certs_ssh_keyfile": "/root/.ssh/sync_certs"
+        "sync_certs_ssh_keyfile": "/root/.ssh/sync_certs",
+        "venv_bin": "virtualenv"
       },
       "settings": {
         "cert_config": {

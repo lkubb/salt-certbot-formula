@@ -12,13 +12,20 @@ values:
     service:
       name: certbot
     pip_install_path: /opt/letsencrypt
-    pip_reqs:
-      - python3-virtualenv
     pkg:
       name: certbot
+      reqs:
+        certbot:
+          - libaugeas0
+        pip: python3-pip
+        python: python3
+        venv:
+          pip: virtualenv
+          pkg: python3-virtualenv
     rrsync_path: /usr/share/doc/rsync/scripts/rrsync
     rsync: rsync
     sync_certs_ssh_keyfile: /root/.ssh/sync_certs
+    venv_bin: virtualenv
   cert_config:
     default:
       auth: standalone

@@ -4,7 +4,9 @@ Description=Sync certificates from upstream
 [Service]
 Type=oneshot
 
-{%- if not salt["cmd.retcode"]('currentver=$(systemd --version | sed -E \'s/systemd ([0-9]+).*$/\1/p\' | head -n 1); requiredver="244"; [ "$(printf "%s\n" "$requiredver" "$currentver" | sort -V | head -n1)" = "$requiredver" ]', python_shell=True) %}
+{%- if not salt["cmd.retcode"](
+      'currentver=$(systemctl --version | sed -E \'s/systemd ([0-9]+).*$/\1/p\' | head -n 1); requiredver="244"; ' ~
+      '[ "$(printf "%s\n" "$requiredver" "$currentver" | sort -V | head -n1)" = "$requiredver" ]', python_shell=True) %}
 
 # When systemd v244+ is available, this should be uncommented to enable retries
 # on failure.

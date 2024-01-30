@@ -19,12 +19,26 @@ Certbot renew unit files are absent:
       - /etc/systemd/system/{{ certbot.lookup.service.name }}.timer
 
 {%- if "pip" == certbot.install_method %}
+{%-   if grains.os_family == "Debian" and (grains.osmajorrelease >=12 or (grains.os == "Ubuntu" and grains.osmajorrelease >=23)) %}
 
-Certbot is absent:
+Certbot is removed:
+  cmd.run:
+    - name: pipx uninstall certbot
+    - env:
+        PIPX_HOME: /opt/pipx
+        PIPX_BIN_DIR: /usr/local/bin
+        PIPX_MAN_DIR: /usr/local/share/man
+    - onlyif:
+      - pipx list --short | grep certbot
+
+{%-   else %}
+
+Certbot is removed:
   file.absent:
     - names:
       - {{ certbot.lookup.pip_install_path }}
       - /usr/local/bin/certbot
+{%-   endif %}
 {%- else %}
 
 Certbot is removed:

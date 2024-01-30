@@ -1,0 +1,28 @@
+# vim: ft=yaml
+#
+# Set values specific to:
+#   salt['config.get']('os_family') == RedHat.
+#
+# You just need to add the key:values for this `os_family` that differ
+# from `defaults.yaml` + `<osarch>.yaml`.
+#
+# If you do not need to provide defaults via the `os_family` config,
+# you can remove this file or provide at least an empty dict, e.g.
+# values: {}
+---
+values:
+  lookup:
+    pkg_manager: yum
+    pkg:
+      reqs:
+        certbot:
+          - augeas-libs
+    rrsync_path: /usr/share/doc/rsync/support/rrsync
+{%- set repos = salt["pkg.list_repos"]() %}
+{%- set epel_missing = repos.get("epel", {}).get("enabled", "0") != "1" %}
+{%- set crb_missing = repos.get("crb", {}).get("enabled", "0") != "1" %}
+{#- Without CRB, a dependency is missing #}
+{%- if epel_missing or crb_missing %}
+    venv_bin: /usr/local/bin/virtualenv
+{%- endif %}
+...
