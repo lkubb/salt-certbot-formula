@@ -26,6 +26,7 @@
       "subcomponent_config": "",
       "git_username": "lkubb",
       "lookup": {
+        "ocsp_cache": "/var/cache/certbot-ocsp-fetcher",
         "pkg": {
           "name": "certbot",
           "reqs": {
@@ -60,9 +61,7 @@
         },
         "install_method": "pip",
         "ocsp_fetcher": {
-          "install": false,
-          "nginx_conf": "/etc/nginx",
-          "subdir": "ocsp-cache"
+          "install": false
         },
         "pip_pkgs": [],
         "renew": {

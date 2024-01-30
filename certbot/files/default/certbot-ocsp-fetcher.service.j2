@@ -8,11 +8,58 @@ Type=oneshot
       'currentver=$(systemctl --version | sed -E \'s/systemd ([0-9]+).*$/\1/p\' | head -n 1); requiredver="244"; ' ~
       '[ "$(printf "%s\n" "$requiredver" "$currentver" | sort -V | head -n1)" = "$requiredver" ]', python_shell=True) %}
 
-# When systemd v244+ is available, this should be uncommented to enable retries
-# on failure.
 Restart=on-failure
 {%- endif %}
 
+CacheDirectory=%N
+
 User=root
 Group=root
-ExecStart=/usr/local/bin/certbot-ocsp-fetcher -o '{{ certbot.ocsp_fetcher.nginx_conf | path_join(certbot.ocsp_fetcher.subdir) }}'
+ExecStart=/usr/local/bin/certbot-ocsp-fetcher --no-reload-webserver
+{%- if grains | traverse("selinux:enabled") %}
+ExecStartPost=+restorecon -R '{{ certbot.lookup.ocsp_cache }}'
+{%- endif %}
+ExecStartPost=systemctl reload nginx.service
+
+RestartSec=5
+PrivateDevices=true
+PrivateTmp=yes
+PrivateUsers=yes
+PrivateIPC=true
+
+NoNewPrivileges=true
+LockPersonality=true
+
+CapabilityBoundingSet=
+ProtectHome=yes
+ProtectControlGroups=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectClock=true
+ProtectProc=invisible
+ProcSubset=pid
+ProtectHostname=true
+RemoveIPC=true
+
+RestrictAddressFamilies=AF_INET6 AF_INET AF_UNIX
+MemoryDenyWriteExecute=true
+RestrictRealtime=true
+RestrictNamespaces=true
+RestrictSUIDSGID=true
+
+DevicePolicy=strict
+DeviceAllow=/dev/random r
+DeviceAllow=/dev/urandom r
+DeviceAllow=/dev/stdin r
+DeviceAllow=/dev/stdout r
+DeviceAllow=/dev/null w
+
+ProtectSystem=strict
+InaccessiblePaths=/root/
+ReadOnlyPaths=/etc/letsencrypt
+UMask=0077
+
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallFilter=~@clock @debug @module @mount @reboot @swap @resources @cpu-emulation @raw-io @obsolete @keyring @privileged

@@ -56,10 +56,27 @@ certbot-ocsp-fetcher service is installed:
 
 OCSP cache dir is present:
   file.directory:
-    - name: {{ certbot.ocsp_fetcher.nginx_conf | path_join(certbot.ocsp_fetcher.subdir) }}
+    - name: {{ certbot.lookup.ocsp_cache }}
     - user: root
     - group: {{ certbot.lookup.rootgroup }}
     - mode: '0644'
     - makedirs: true
     - require:
       - sls: {{ sls_package_install }}
+
+{%- if grains | traverse("selinux:enabled") %}
+
+OCSP cache dir has correct SELinux type:
+  selinux.fcontext_policy_present:
+    - name: {{ certbot.lookup.ocsp_cache }}(/.*)?
+    - sel_type: httpd_config_t
+    - require:
+      - file: {{ certbot.lookup.ocsp_cache }}
+
+OCSP SELinux policy is applied:
+  selinux.fcontext_policy_applied:
+    - name: {{ certbot.lookup.ocsp_cache }}
+    - recursive: true
+    - require:
+      - OCSP cache dir has correct SELinux type
+{%- endif %}

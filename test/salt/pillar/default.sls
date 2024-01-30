@@ -9,6 +9,7 @@ certbot:
     config: '/etc/letsencrypt/cli.ini'
     service:
       name: certbot
+    ocsp_cache: /var/cache/certbot-ocsp-fetcher
     pip_install_path: /opt/letsencrypt
     pkg:
       name: certbot
@@ -37,8 +38,6 @@ certbot:
   install_method: pip
   ocsp_fetcher:
     install: false
-    nginx_conf: /etc/nginx
-    subdir: ocsp-cache
   pip_pkgs: []
   renew:
     rand_delay: 1h
