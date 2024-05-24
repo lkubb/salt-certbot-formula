@@ -9,6 +9,11 @@
 {%- set sls_sync_certs_config = tplroot ~ ".sync_certs.config" %}
 {%- from tplroot ~ "/map.jinja" import mapdata as certbot with context %}
 
+{%- set id_files = ["'{}'".format(certbot.lookup.sync_certs_ssh_keyfile)] %}
+{%- if certbot.sync_certs.ssh_certs %}
+{%-   do id_files.append("'{}_{}.crt'".format(certbot.lookup.sync_certs_ssh_keyfile, certbot.sync_certs.ssh_certs | first)) %}
+{%- endif %}
+
 include:
   - {{ sls_sync_certs_config }}
 
@@ -28,7 +33,7 @@ Certificates are synced now once:
         "ssh {{- ' -o StrictHostKeyChecking=no'
                     if not certbot.sync_certs.from_host_key
                     and "add" == salt["ssh.check_known_host"](user="root", hostname=certbot.sync_certs.from) }}
-        -i '{{ certbot.lookup.sync_certs_ssh_keyfile }}'"
+        -i {{ id_files | join(" -i ") }}
         certsync@{{ certbot.sync_certs.from }}:* {{ certbot.sync_certs.to }}/
   # module.run:
   #   - service.start:

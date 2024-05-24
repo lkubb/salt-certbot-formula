@@ -57,6 +57,26 @@ certbot:
     key_bits: null
       # Key type parameter (-t) for ssh-keygen when generating minion keys
     key_type: ed25519
+      # Generate client certificates instead of sending
+      # the public key to the mine. Requires `ssh_pki` modules.
+      # Mapping of certificate name to cert_params.
+      # Will be saved at /root/.ssh/sync_certs_<name>.crt by default.
+      # Currently only supports one certificate, could be used to sync
+      # multiple directories/hosts in the future @TODO
+    ssh_certs: {}
+      # Default parameters to `ssh_pki.certificate_managed`.
+      # You should set most of those in the signing policy, including
+      # a critical option `force-command` that restricts connections
+      # using it to a specific rsync command.
+    ssh_cert_params:
+      all_principals: false
+      backend: null
+      backend_args: null
+      ca_server: null
+      signing_policy: null
+      ttl: null
+      ttl_remaining: null
+      valid_principals: null
       # Pillar key that contains the private key needed to pull certificates.
       # If left empty, a new key will be generated and its pubkey sent to the mine.
       # For this to work, your minions need the pillar value `certsync_role: client`,

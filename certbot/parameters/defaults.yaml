@@ -46,6 +46,16 @@ values:
     from_host_key: null
     key_bits: null
     key_type: ed25519
+    ssh_cert_params:
+      all_principals: false
+      backend: null
+      backend_args: null
+      ca_server: null
+      signing_policy: null
+      ttl: null
+      ttl_remaining: null
+      valid_principals: null
+    ssh_certs: {}
     ssh_privkey_pillar: null
     to: /etc/letsencrypt
   version: latest

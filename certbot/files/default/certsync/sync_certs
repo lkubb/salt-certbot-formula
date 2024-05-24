@@ -1,7 +1,12 @@
+{%- set id_files = ["'{}'".format(certbot.lookup.sync_certs_ssh_keyfile)] %}
+{%- if certbot.sync_certs.ssh_certs %}
+{%-   do id_files.append("'{}_{}.crt'".format(certbot.lookup.sync_certs_ssh_keyfile, certbot.sync_certs.ssh_certs | first)) %}
+{%- endif -%}
+
 #!/bin/sh
 
 changed=0
-rsync_out=$(rsync -aiz -e "ssh -i '{{ certbot.lookup.sync_certs_ssh_keyfile }}'" certsync@{{ certbot.sync_certs.from }}:* {{ certbot.sync_certs.to }}/)
+rsync_out=$(rsync -aiz -e "ssh -i {{ id_files | join(" -i ") }}" certsync@{{ certbot.sync_certs.from }}:* {{ certbot.sync_certs.to }}/)
 
 if [ $? -eq 0 ]; then
     if [ -n "${rsync_out}" ]; then

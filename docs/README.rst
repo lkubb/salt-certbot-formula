@@ -149,8 +149,9 @@ that are not reachable from the public internet.
 
 ``certbot.sync_certs.config``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Creates an SSH private key and sends its associated
-public key to the mine for the borg server to recognize it.
+Creates an SSH private key. Needs to ensure it will be accepted
+by the host to sync from, either by sending its public key to the mine
+or by generating an SSH client certificate if configured.
 
 
 ``certbot.sync_certs.package``
